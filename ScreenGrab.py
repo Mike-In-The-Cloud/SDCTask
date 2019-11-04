@@ -3,7 +3,7 @@ import numpy as np
 from PIL import ImageGrab
 import cv2
 import time
-from directkeys import PressKey, ReleaseKey, W, S
+from directkeys import PressKey, ReleaseKey, W, A, S, D
 
 #########################################################################
 #                                                                       #
@@ -58,40 +58,7 @@ def processed_img(image):
     processed_img = cv2.cvtColor(original_image, 
                                  cv2.COLOR_BGR2GRAY)
 
-    # median blur helps remove noise from the image that is being processed
-    processed_img = cv2.medianBlur(processed_img,
-                                   9)
-    # edge detection using Canny 
-    processed_img = cv2.Canny(processed_img, 
-                              threshold1= 50, # these are tweekable
-                              threshold2 = 100) # these are tweekable
-
-    # apply a gaussian blur to smooth edges
-    processed_img = cv2.GaussianBlur(processed_img,
-                                     (3,3), # kernal size, must be an odd number
-                                     0)
-  
-    # defines the vertices for the region of intrest
-    vertices = np.array([[10,500],
-                         [10,300],
-                         [300,200],
-                         [500,200],
-                         [800,300],
-                         [800,500]])
-    # passes the processed image and the vertices to the region of intrest
-    processed_img = roi(processed_img, 
-                        [vertices])
-
-    # hough line returns an array of arrays that contain the lines
-    lines = cv2.HoughLinesP(processed_img, 
-                            1, # rho
-                            np.pi/180, # theta
-                            200, # threshold
-                            np.array([]), # empty array
-                            150, # minimum line lenght
-                            10) # max line gap
-    draw_lines(processed_img, lines)
-
+    
 
     return processed_img
 
@@ -110,7 +77,9 @@ while(True):
         cv2.imshow('window', new_screen)
         # using cv2 library to show the image capture, colour correction has been applied using cvtColor
         # cv2.imshow('window', cv2.cvtColor(screengrab, cv2.COLOR_BGR2RGB))
-        PressKey(W)
+        
+        
+        #PressKey(W)
 
         # press q to quit!!
         if cv2.waitKey(25) & 0xFF == ord('q'):
